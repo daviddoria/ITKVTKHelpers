@@ -17,7 +17,7 @@
  *=========================================================================*/
 
 #include "ITKVTKHelpers.h"
-#include "ITKHelpers.h"
+#include "ITKHelpers/ITKHelpers.h"
 
 // VTK
 #include <vtkFloatArray.h>
@@ -34,10 +34,7 @@ namespace ITKVTKHelpers
 
 void CreateTransparentVTKImage(const itk::Size<2>& size, vtkImageData* const outputImage)
 {
-  //outputImage->SetNumberOfScalarComponents(4);
-  //outputImage->SetScalarTypeToUnsignedChar();
   outputImage->SetDimensions(size[0], size[1], 1);
-  //outputImage->AllocateScalars();
   outputImage->AllocateScalars(VTK_UNSIGNED_CHAR, 4);
 
   for(unsigned int i = 0; i < size[0]; ++i)
@@ -54,7 +51,6 @@ void CreateTransparentVTKImage(const itk::Size<2>& size, vtkImageData* const out
   outputImage->Modified();
 }
 
-
 void SetRegionCenterPixel(vtkImageData* const image, const itk::ImageRegion<2>& region, const unsigned char color[3])
 {
   int dims[3];
@@ -67,7 +63,6 @@ void SetRegionCenterPixel(vtkImageData* const image, const itk::ImageRegion<2>& 
   pixel[2] = color[2];
   pixel[3] = 255; // visible
 }
-
 
 // Convert a vector ITK image to a VTK image for display
 void ITKVectorImageToVTKImageFromDimension(const FloatVectorImageType* const image, vtkImageData* const outputImage)
