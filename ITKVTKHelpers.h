@@ -62,10 +62,6 @@ void ITKImageToVTKMagnitudeImage(const FloatVectorImageType* const image, vtkIma
 void ITKImageChannelToVTKImage(const FloatVectorImageType* const image, const unsigned int channel,
                                vtkImageData* const outputImage);
 
-
-void ITKImageToVTKImageMasked(const FloatVectorImageType* const image, const Mask* const mask,
-                              vtkImageData* const outputImage, const unsigned char maskColor[3]);
-
 // Create a VTK image filled with values representing vectors. (There is no concept of a "vector image" in VTK).
 void ITKImageToVTKVectorFieldImage(const FloatVector2ImageType* image, vtkImageData* outputImage);
 
