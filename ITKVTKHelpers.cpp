@@ -96,12 +96,9 @@ void ITKImageToVTKRGBImage(const FloatVectorImageType* const image, vtkImageData
     }
 
   // Setup and allocate the image data
-  //outputImage->SetNumberOfScalarComponents(3);
-  //outputImage->SetScalarTypeToUnsignedChar();
   outputImage->SetDimensions(image->GetLargestPossibleRegion().GetSize()[0],
                              image->GetLargestPossibleRegion().GetSize()[1],
                              1);
-  //outputImage->AllocateScalars();
   outputImage->AllocateScalars(VTK_UNSIGNED_CHAR, 3);
 
   // Copy all of the input image pixels to the output image
@@ -148,13 +145,9 @@ void ITKImageToVTKMagnitudeImage(const FloatVectorImageType* const image, vtkIma
   rescaleFilter->Update();
 
   // Setup and allocate the VTK image
-  //outputImage->SetNumberOfScalarComponents(1);
-  //outputImage->SetScalarTypeToUnsignedChar();
   outputImage->SetDimensions(image->GetLargestPossibleRegion().GetSize()[0],
                              image->GetLargestPossibleRegion().GetSize()[1],
                              1);
-  //outputImage->AllocateScalars();
-  //outputImage->AllocateScalars(VTK_UNSIGNED_CHAR, 1);
   outputImage->AllocateScalars(VTK_UNSIGNED_CHAR, 3);
 
   // Copy all of the scaled magnitudes to the output image
@@ -187,13 +180,10 @@ void ITKImageToVTKVectorFieldImage(const FloatVector2ImageType* const image, vtk
   //std::cout << "ITKImagetoVTKVectorFieldImage()" << std::endl;
 
   // Setup and allocate the image data
-  //outputImage->SetNumberOfScalarComponents(3); // We really want this to be 2, but VTK complains, so we must add a 3rd component (0) to every pixel
-  //outputImage->SetScalarTypeToFloat();
   outputImage->SetDimensions(image->GetLargestPossibleRegion().GetSize()[0],
                              image->GetLargestPossibleRegion().GetSize()[1],
                              1);
-  //outputImage->AllocateScalars();
-  outputImage->AllocateScalars(VTK_FLOAT, 3);
+  outputImage->AllocateScalars(VTK_FLOAT, 3);// We really want this to be 2, but VTK complains, so we must add a 3rd component (0) to every pixel
 
   // Copy all of the input image pixels to the output image
   itk::ImageRegionConstIteratorWithIndex<FloatVector2ImageType> imageIterator(image, image->GetLargestPossibleRegion());
