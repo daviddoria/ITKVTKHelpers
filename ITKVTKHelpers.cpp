@@ -520,4 +520,14 @@ std::vector<itk::Index<2> > PolyDataToPixelList(vtkPolyData* const polydata)
   return allIndices;
 }
 
+void PixelListToPoints(const std::vector<itk::Index<2> >& pixels, vtkPoints* const points)
+{
+  typedef std::vector<itk::Index<2> > PixelContainer;
+
+  for(PixelContainer::const_iterator iter = pixels.begin(); iter != pixels.end(); ++iter)
+  {
+    points->InsertNextPoint((*iter)[0], (*iter)[1], 0);
+  }
+}
+
 } // end namespace

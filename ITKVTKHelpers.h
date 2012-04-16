@@ -22,6 +22,7 @@
 // VTK
 class vtkImageData;
 class vtkPolyData;
+class vtkPoints;
 class vtkStructuredGrid;
 
 // ITK
@@ -49,6 +50,8 @@ void CreateTransparentVTKImage(const itk::Size<2>& size, vtkImageData* const out
 // Create an image from the values in an array of the corresponding structured grid points.
 void CreateVectorImageFromStructuredGridArray(vtkStructuredGrid* const structuredGrid, const std::string& arrayName,
                                               FloatVectorImageType* const outputImage);
+
+void PixelListToPoints(const std::vector<itk::Index<2> >& pixels, vtkPoints* const points);
 
 // Create an image from the values in an array of the corresponding structured grid points.
 void CreateScalarImageFromStructuredGridArray(vtkStructuredGrid* const structuredGrid, const std::string& arrayName,
