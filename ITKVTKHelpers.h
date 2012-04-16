@@ -34,6 +34,9 @@ class vtkStructuredGrid;
 namespace ITKVTKHelpers
 {
 
+/** Convert the points in a polydata to a list of indices. */
+std::vector<itk::Index<2> > PolyDataToPixelList(vtkPolyData* const polydata);
+
 typedef itk::Image<float, 2> FloatScalarImageType;
 
 typedef itk::VectorImage<float, 2> FloatVectorImageType;
@@ -44,13 +47,21 @@ typedef itk::Image<FloatVector2Type , 2> FloatVector2ImageType;
 void CreateTransparentVTKImage(const itk::Size<2>& size, vtkImageData* const outputImage);
 
 // Create an image from the values in an array of the corresponding structured grid points.
-void CreateVectorImageFromStructuredGridArray(vtkStructuredGrid* const structuredGrid, const std::string& arrayName, FloatVectorImageType* const outputImage);
+void CreateVectorImageFromStructuredGridArray(vtkStructuredGrid* const structuredGrid, const std::string& arrayName,
+                                              FloatVectorImageType* const outputImage);
 
 // Create an image from the values in an array of the corresponding structured grid points.
-void CreateScalarImageFromStructuredGridArray(vtkStructuredGrid* const structuredGrid, const std::string& arrayName, FloatScalarImageType* const outputImage);
+void CreateScalarImageFromStructuredGridArray(vtkStructuredGrid* const structuredGrid, const std::string& arrayName,
+                                              FloatScalarImageType* const outputImage);
 
-// Set the center pixel of a 'region' in an 'image' to the specified 'color'. The region is assumed to have odd dimensions.
-void SetRegionCenterPixel(vtkImageData* const image, const itk::ImageRegion<2>& region, const unsigned char color[3]);
+void SetPixels(vtkImageData* const VTKImage, const std::vector<itk::Index<2> >& pixels,
+               const unsigned char color[3]);
+
+/** Set the center pixel of a 'region' in an 'image' to the specified 'color'.
+    The region is assumed to have odd dimensions.
+*/
+void SetRegionCenterPixel(vtkImageData* const image, const itk::ImageRegion<2>& region,
+                          const unsigned char color[3]);
 
 /** This function simply drives ITKImagetoVTKRGBImage or ITKImagetoVTKMagnitudeImage based on
   *the number of components of the input. */
@@ -72,7 +83,8 @@ void ConvertNonZeroPixelsToVectors(const FloatVector2ImageType* const vectorImag
 
 
 // Simply calls BlankRegion followed by OutlineRegion
-void BlankAndOutlineRegion(vtkImageData* const image, const itk::ImageRegion<2>& region, const unsigned char value[3]);
+void BlankAndOutlineRegion(vtkImageData* const image, const itk::ImageRegion<2>& region,
+                           const unsigned char value[3]);
 
 // Set pixels on the boundary of 'region' in 'image' to 'value'.
 void OutlineRegion(vtkImageData* const image, const itk::ImageRegion<2>& region, const unsigned char value[3]);
