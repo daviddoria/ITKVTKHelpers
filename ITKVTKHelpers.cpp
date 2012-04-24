@@ -452,22 +452,26 @@ void SetPixels(vtkImageData* const VTKImage, const std::vector<itk::Index<2> >& 
 
 }
 
-
 std::vector<itk::Index<2> > PolyDataToPixelList(vtkPolyData* const polydata)
+{
+  return PointsToPixelList(polydata->GetPoints());
+}
+
+std::vector<itk::Index<2> > PointsToPixelList(vtkPoints* const points)
 {
   // The points of the polydata are floating point values, we must convert them to pixel indices.
 
   //std::cout << "Enter PolyDataToPixelList()" << std::endl;
-  std::cout << "There are " << polydata->GetNumberOfPoints() << " points." << std::endl;
+  std::cout << "There are " << points->GetNumberOfPoints() << " points." << std::endl;
 
   // Convert vtkPoints to indices
   //std::cout << "Converting vtkPoints to indices..." << std::endl;
   std::vector<itk::Index<2> > linePoints;
-  for(vtkIdType pointId = 0; pointId < polydata->GetNumberOfPoints(); ++pointId)
+  for(vtkIdType pointId = 0; pointId < points->GetNumberOfPoints(); ++pointId)
     {
     itk::Index<2> index;
     double p[3];
-    polydata->GetPoint(pointId, p);
+    points->GetPoint(pointId, p);
     // std::cout << "point " << pointId << " : " << p[0] << " " << p[1] << " " << p[2] << std::endl;
     index[0] = round(p[0]);
     index[1] = round(p[1]);

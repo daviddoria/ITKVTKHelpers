@@ -21,6 +21,7 @@
 
 // VTK
 class vtkImageData;
+class vtkPoints;
 class vtkPolyData;
 class vtkStructuredGrid;
 
@@ -36,6 +37,7 @@ namespace ITKVTKHelpers
 
 /** Convert the points in a polydata to a list of indices. */
 std::vector<itk::Index<2> > PolyDataToPixelList(vtkPolyData* const polydata);
+std::vector<itk::Index<2> > PointsToPixelList(vtkPoints* const points);
 
 typedef itk::Image<float, 2> FloatScalarImageType;
 
