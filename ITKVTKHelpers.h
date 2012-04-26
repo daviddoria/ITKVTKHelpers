@@ -30,6 +30,7 @@ class vtkStructuredGrid;
 #include "itkCovariantVector.h"
 #include "itkImage.h"
 #include "itkImageRegion.h"
+#include "itkRGBPixel.h"
 #include "itkSize.h"
 #include "itkVectorImage.h"
 
@@ -93,6 +94,10 @@ void BlankAndOutlineRegion(vtkImageData* const image, const itk::ImageRegion<2>&
 
 // Set pixels on the boundary of 'region' in 'image' to 'value'.
 void OutlineRegion(vtkImageData* const image, const itk::ImageRegion<2>& region, const unsigned char value[3]);
+
+/** Convert an ITK image to a VTK image */
+void ITKRGBImageToVTKImage(const itk::Image<itk::RGBPixel<unsigned char>, 2>* const image,
+                            vtkImageData* const outputImage);
 
 /** Set all pixels in 'region' in 'image' to black. */
 void BlankRegion(vtkImageData* const image, const itk::ImageRegion<2>& region);

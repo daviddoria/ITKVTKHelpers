@@ -534,4 +534,37 @@ void PixelListToPoints(const std::vector<itk::Index<2> >& pixels, vtkPoints* con
   }
 }
 
+
+void ITKRGBImageToVTKImage(const itk::Image<itk::RGBPixel<unsigned char>, 2>* const image,
+                           vtkImageData* const outputImage)
+{
+  typedef itk::Image<itk::RGBPixel<unsigned char>, 2> RGBImageType;
+  // Setup and allocate the VTK image
+  //outputImage->SetNumberOfScalarComponents(3);
+  //outputImage->SetScalarTypeToUnsignedChar();
+  outputImage->SetDimensions(image->GetLargestPossibleRegion().GetSize()[0],
+                             image->GetLargestPossibleRegion().GetSize()[1],
+                             1);
+
+  //outputImage->AllocateScalars();
+  outputImage->AllocateScalars(VTK_UNSIGNED_CHAR, 3);
+
+  // Copy all of the scaled magnitudes to the output image
+  itk::ImageRegionConstIteratorWithIndex<RGBImageType> imageIterator(image, image->GetLargestPossibleRegion());
+  imageIterator.GoToBegin();
+
+  while(!imageIterator.IsAtEnd())
+    {
+    unsigned char* pixel = static_cast<unsigned char*>(outputImage->GetScalarPointer(imageIterator.GetIndex()[0],
+                                                                                     imageIterator.GetIndex()[1],0));
+    pixel[0] = imageIterator.Get().GetRed();
+    pixel[1] = imageIterator.Get().GetGreen();
+    pixel[2] = imageIterator.Get().GetBlue();
+
+    ++imageIterator;
+    }
+
+  outputImage->Modified();
+}
+
 } // end namespace
