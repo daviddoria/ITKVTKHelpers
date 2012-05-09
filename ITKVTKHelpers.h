@@ -70,13 +70,19 @@ void SetRegionCenterPixel(vtkImageData* const image, const itk::ImageRegion<2>& 
                           const unsigned char color[3]);
 
 /** This function simply drives ITKImagetoVTKRGBImage or ITKImagetoVTKMagnitudeImage based on
-  *the number of components of the input. */
-void ITKVectorImageToVTKImageFromDimension(const FloatVectorImageType* const image, vtkImageData* const outputImage);
+  * the number of components of the input. */
+template <typename TPixel>
+void ITKVectorImageToVTKImageFromDimension(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage);
 
 /** These functions create a VTK image from a multidimensional ITK image. */
-void ITKImageToVTKRGBImage(const FloatVectorImageType* const image, vtkImageData* const outputImage);
-void ITKImageToVTKMagnitudeImage(const FloatVectorImageType* const image, vtkImageData* const outputImage);
-void ITKImageChannelToVTKImage(const FloatVectorImageType* const image, const unsigned int channel,
+template <typename TPixel>
+void ITKImageToVTKRGBImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage);
+
+template <typename TPixel>
+void ITKImageToVTKMagnitudeImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage);
+
+template <typename TPixel>
+void ITKImageChannelToVTKImage(const itk::VectorImage<TPixel, 2>* const image, const unsigned int channel,
                                vtkImageData* const outputImage);
 
 // Create a VTK image filled with values representing vectors. (There is no concept of a "vector image" in VTK).
