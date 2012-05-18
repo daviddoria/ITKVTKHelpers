@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 
 project(ITKVTKHelpers)
 
-add_subdirectory(ITKHelpers)
-
-add_library(libITKVTKHelpers ITKVTKHelpers.cpp)
+if(NOT TARGET ITKHelpers)
+  add_subdirectory(ITKHelpers)
+endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -22,3 +22,5 @@ if(BuildTests)
   add_subdirectory(Tests)
 endif(BuildTests)
 
+add_library(ITKVTKHelpers ITKVTKHelpers.cpp)
+target_link_libraries(ITKVTKHelpers ${ITK_LIBRARIES} ${VTK_LIBRARIES})
