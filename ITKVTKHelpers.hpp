@@ -150,7 +150,7 @@ void ITKImageToVTKMagnitudeImage(const itk::VectorImage<TPixel, 2>* const image,
 {
   //std::cout << "ITKImagetoVTKMagnitudeImage()" << std::endl;
 
-  typedef itk::VectorImage<TPixel> VectorImageType;
+  typedef itk::VectorImage<TPixel, 2> VectorImageType;
   
   // Compute the magnitude of the ITK image
   typedef itk::VectorMagnitudeImageFilter<
