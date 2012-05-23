@@ -18,9 +18,10 @@ INCLUDE(${ITK_USE_FILE})
 FIND_PACKAGE(VTK REQUIRED)
 INCLUDE(${VTK_USE_FILE})
 
-if(BuildTests)
+SET(ITKVTKHelpers_BuildTests ON CACHE BOOL "ITKVTKHelpers_BuildTests" FORCE)
+if(ITKVTKHelpers_BuildTests)
   add_subdirectory(Tests)
-endif(BuildTests)
+endif(ITKVTKHelpers_BuildTests)
 
 add_library(ITKVTKHelpers ITKVTKHelpers.cpp)
 target_link_libraries(ITKVTKHelpers ${ITK_LIBRARIES} ${VTK_LIBRARIES})

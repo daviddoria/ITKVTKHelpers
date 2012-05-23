@@ -156,26 +156,28 @@ void BlankRegion(vtkImageData* image, const itk::ImageRegion<2>& region)
 void OutlineRegion(vtkImageData* const image, const itk::ImageRegion<2>& region, const unsigned char color[3])
 {
 //   std::cout << "Outlining region: " << region << std::endl;
-   std::cout << "Outline color: " << static_cast<int>(color[0]) << " " << static_cast<int>(color[1]) << " " << static_cast<int>(color[2]) << std::endl;
+//    std::cout << "Outline color: " << static_cast<int>(color[0])
+//              << " " << static_cast<int>(color[1]) << " "
+//              << static_cast<int>(color[2]) << std::endl;
 //   std::cout << "Image components: " << image->GetNumberOfScalarComponents() << std::endl;
 
   unsigned int leftEdge = region.GetIndex()[0];
-  std::cout << "leftEdge : " << leftEdge << std::endl;
+  //std::cout << "leftEdge : " << leftEdge << std::endl;
   
   unsigned int rightEdge = region.GetIndex()[0] + region.GetSize()[0] - 1;
-  std::cout << "rightEdge : " << rightEdge << std::endl;
+  //std::cout << "rightEdge : " << rightEdge << std::endl;
 
   unsigned int topEdge = region.GetIndex()[1];
-  std::cout << "topEdge : " << topEdge << std::endl;
+  //std::cout << "topEdge : " << topEdge << std::endl;
   
   unsigned int bottomEdge = region.GetIndex()[1] + region.GetSize()[1] - 1;
-  std::cout << "bottomEdge : " << bottomEdge << std::endl;
+  //std::cout << "bottomEdge : " << bottomEdge << std::endl;
   
   // Move along the top and bottom of the region, setting the border pixels.
   unsigned int counter = 0;
   for(unsigned int xpos = leftEdge; xpos <= rightEdge; ++xpos)
     {
-    std::cout << "xpos : " << xpos << std::endl;
+    //std::cout << "xpos : " << xpos << std::endl;
     unsigned char* topPixel = static_cast<unsigned char*>(image->GetScalarPointer(xpos, topEdge, 0));
     topPixel[0] = color[0];
     topPixel[1] = color[1];
@@ -191,22 +193,22 @@ void OutlineRegion(vtkImageData* const image, const itk::ImageRegion<2>& region,
     counter++;
     }
 
-  std::cout << "Set " << counter << " pixels." << std::endl;
+  //std::cout << "Set " << counter << " pixels." << std::endl;
   // Move along the left and right of the region, setting the border pixels.
-//   for(unsigned int j = region.GetIndex()[1]; j < region.GetIndex()[1] + region.GetSize()[1]; ++j)
-//     {
-//     unsigned char* pixel = static_cast<unsigned char*>(image->GetScalarPointer(region.GetIndex()[0], j, 0));
-//     pixel[0] = color[0];
-//     pixel[1] = color[1];
-//     pixel[2] = color[2];
-//     pixel[3] = 255; // visible
-// 
-//     pixel = static_cast<unsigned char*>(image->GetScalarPointer(region.GetIndex()[0] + region.GetSize()[0] - 1, j, 0));
-//     pixel[0] = color[0];
-//     pixel[1] = color[1];
-//     pixel[2] = color[2];
-//     pixel[3] = 255; // visible
-//     }
+  for(unsigned int j = region.GetIndex()[1]; j < region.GetIndex()[1] + region.GetSize()[1]; ++j)
+    {
+    unsigned char* pixel = static_cast<unsigned char*>(image->GetScalarPointer(region.GetIndex()[0], j, 0));
+    pixel[0] = color[0];
+    pixel[1] = color[1];
+    pixel[2] = color[2];
+    pixel[3] = 255; // visible
+
+    pixel = static_cast<unsigned char*>(image->GetScalarPointer(region.GetIndex()[0] + region.GetSize()[0] - 1, j, 0));
+    pixel[0] = color[0];
+    pixel[1] = color[1];
+    pixel[2] = color[2];
+    pixel[3] = 255; // visible
+    }
 
   image->Modified();
 }
