@@ -146,6 +146,37 @@ void ITKImageToVTKRGBImage(const itk::VectorImage<TPixel, 2>* const image, vtkIm
 
 // Convert a vector ITK image to a VTK image for display
 template <typename TPixel>
+void ITKImageToVTKRGBImage(const itk::Image<itk::CovariantVector<TPixel, 3>, 2>* const image,
+                           vtkImageData* const outputImage)
+{
+  typedef itk::Image<itk::CovariantVector<TPixel, 3>, 2> ImageType;
+  // Setup and allocate the image data
+  outputImage->SetDimensions(image->GetLargestPossibleRegion().GetSize()[0],
+                             image->GetLargestPossibleRegion().GetSize()[1],
+                             1);
+  outputImage->AllocateScalars(VTK_UNSIGNED_CHAR, 3);
+
+  // Copy all of the input image pixels to the output image
+  itk::ImageRegionConstIteratorWithIndex<ImageType> imageIterator(image, image->GetLargestPossibleRegion());
+  imageIterator.GoToBegin();
+
+  while(!imageIterator.IsAtEnd())
+    {
+    unsigned char* pixel = static_cast<unsigned char*>(outputImage->GetScalarPointer(imageIterator.GetIndex()[0],
+                                                                                     imageIterator.GetIndex()[1],0));
+    for(unsigned int component = 0; component < 3; component++)
+      {
+      pixel[component] = static_cast<unsigned char>(imageIterator.Get()[component]);
+      }
+
+    ++imageIterator;
+    }
+
+  outputImage->Modified();
+}
+
+// Convert a vector ITK image to a VTK image for display
+template <typename TPixel>
 void ITKImageToVTKMagnitudeImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage)
 {
   //std::cout << "ITKImagetoVTKMagnitudeImage()" << std::endl;

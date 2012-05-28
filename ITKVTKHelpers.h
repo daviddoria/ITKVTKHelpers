@@ -74,6 +74,10 @@ void SetRegionCenterPixel(vtkImageData* const image, const itk::ImageRegion<2>& 
 template <typename TPixel>
 void ITKVectorImageToVTKImageFromDimension(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage);
 
+template <typename TPixel>
+void ITKImageToVTKRGBImage(const itk::Image<itk::CovariantVector<TPixel, 3>, 2>* const image,
+                           vtkImageData* const outputImage);
+
 /** These functions create a VTK image from a multidimensional ITK image. */
 template <typename TPixel>
 void ITKImageToVTKRGBImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage);
