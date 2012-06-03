@@ -21,9 +21,6 @@
 // Submodules
 #include "ITKHelpers/ITKHelpers.h"
 
-// STL
-#include <cmath> // for round()
-
 // VTK
 #include <vtkFloatArray.h>
 #include <vtkImageData.h>
@@ -370,8 +367,11 @@ std::vector<itk::Index<2> > PointsToPixelList(vtkPoints* const points)
     double p[3];
     points->GetPoint(pointId, p);
     // std::cout << "point " << pointId << " : " << p[0] << " " << p[1] << " " << p[2] << std::endl;
-    index[0] = round(p[0]);
-    index[1] = round(p[1]);
+
+    // Use itk::Math::Round instead of round() for cross-platform compatibility (specifically,
+    // VS2010 does not have round() in cmath)
+    index[0] = static_cast<itk::Index<2>::IndexValueType>(itk::Math::Round<double,double>(p[0]));
+    index[1] = static_cast<itk::Index<2>::IndexValueType>(itk::Math::Round<double,double>(p[1]));
     if(linePoints.size() == 0)
       {
       linePoints.push_back(index);
