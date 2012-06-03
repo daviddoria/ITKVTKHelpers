@@ -213,7 +213,8 @@ void OutlineRegion(vtkImageData* const image, const itk::ImageRegion<2>& region,
   image->Modified();
 }
 
-void CreateVectorImageFromStructuredGridArray(vtkStructuredGrid* const structuredGrid, const std::string& arrayName, FloatVectorImageType* const outputImage)
+void CreateVectorImageFromStructuredGridArray(vtkStructuredGrid* const structuredGrid,
+                                              const std::string& arrayName, FloatVectorImageType* const outputImage)
 {
   itk::ImageRegionIteratorWithIndex<FloatVectorImageType> imageIterator(outputImage, outputImage->GetLargestPossibleRegion());
   imageIterator.GoToBegin();
@@ -246,8 +247,8 @@ void CreateVectorImageFromStructuredGridArray(vtkStructuredGrid* const structure
 
     if(structuredGrid->IsPointVisible(pointId))
       {
-      double value[dataArray->GetNumberOfComponents()];
-      dataArray->GetTuple(pointId, value);
+      std::vector<double> value(dataArray->GetNumberOfComponents());
+      dataArray->GetTuple(pointId, value.data());
 
       for(vtkIdType component = 0; component < dataArray->GetNumberOfComponents(); ++component)
         {
