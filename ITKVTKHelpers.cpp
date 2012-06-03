@@ -17,7 +17,12 @@
  *=========================================================================*/
 
 #include "ITKVTKHelpers.h"
+
+// Submodules
 #include "ITKHelpers/ITKHelpers.h"
+
+// STL
+#include <cmath> // for round()
 
 // VTK
 #include <vtkFloatArray.h>
