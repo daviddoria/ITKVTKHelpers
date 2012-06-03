@@ -8,11 +8,21 @@ to get the code in ITKHelpers/ and ITKHelpers/Helpers/ that this code relies on.
 
 NOTE: Although it depends on the ITKHelpers repository, this repository does not currently depend on the VTKHelpers repository.
 
+If this command gives you trouble (known problem with mysysgit), instead of
+
+git clone ...
+
+use
+
+git clone --recursive ...
+
+and then no "git submodule update ..." is required.
+
 Building
 --------
 This repository does not depend on any external libraries. The only caveat is that it depends
 on c++0x/11 parts of the c++ language. For Linux, this means it must be built with the flag
-gnu++0x. For Windows, we are working on finding the comparable solution/flag.
+gnu++0x. For Windows (Visual Studio 2010), nothing special is required.
 
 Usage
 -----

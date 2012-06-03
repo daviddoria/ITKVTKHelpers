@@ -6,11 +6,10 @@ if(NOT TARGET ITKHelpers)
   add_subdirectory(ITKHelpers)
 endif()
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
-# This is needed for shared_ptr and the trick using enable_if and if_fundamental to allow scalars
-# to be treated as the 0th component of a vector.
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x")
+# Required for c++0x features used in Helpers sub-sub-module
+if(UNIX)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+endif(UNIX)
 
 FIND_PACKAGE(ITK REQUIRED)
 INCLUDE(${ITK_USE_FILE})
@@ -24,4 +23,4 @@ if(ITKVTKHelpers_BuildTests)
 endif(ITKVTKHelpers_BuildTests)
 
 add_library(ITKVTKHelpers ITKVTKHelpers.cpp)
-target_link_libraries(ITKVTKHelpers ${ITK_LIBRARIES} ${VTK_LIBRARIES})
+target_link_libraries(ITKVTKHelpers ${ITK_LIBRARIES} ${VTK_LIBRARIES} ITKHelpers)
