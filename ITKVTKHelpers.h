@@ -76,11 +76,12 @@ void ITKVectorImageToVTKImageFromDimension(const itk::VectorImage<TPixel, 2>* co
 
 template <typename TPixel>
 void ITKImageToVTKRGBImage(const itk::Image<itk::CovariantVector<TPixel, 3>, 2>* const image,
-                           vtkImageData* const outputImage);
+                           vtkImageData* const outputImage, const bool alreadyInitialized = false);
 
 /** These functions create a VTK image from a multidimensional ITK image. */
 template <typename TPixel>
-void ITKImageToVTKRGBImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage);
+void ITKImageToVTKRGBImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage,
+                           const bool alreadyInitialized = false);
 
 template <typename TPixel>
 void ITKImageToVTKMagnitudeImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage);
@@ -119,6 +120,10 @@ void ITKScalarImageToScaledVTKImage(const TImage* const image, vtkImageData* con
 /** Create a VTK image of a patch of an image. */
 template <typename TImage>
 void CreatePatchVTKImage(const TImage* image, const itk::ImageRegion<2>& region, vtkImageData* outputImage);
+
+/** Initialize a VTK image from an ITK image's size. */
+template <typename TImage>
+void InitializeVTKImage(const itk::ImageRegion<2>& region, const unsigned int channels, vtkImageData* outputImage);
 
 } // end namespace
 
