@@ -240,14 +240,4 @@ void ITKImageChannelToVTKImage(const itk::VectorImage<TPixel, 2>* const image, c
   ITKScalarImageToScaledVTKImage<FloatScalarImageType>(channelImage, outputImage);
 }
 
-template <typename TImage>
-void InitializeVTKImage(const itk::ImageRegion<2>& region, const unsigned int channels, vtkImageData* outputImage)
-{
-  // Setup and allocate the VTK image
-  outputImage->SetDimensions(region.GetSize()[0],
-                             region.GetSize()[1],
-                             1);
-  outputImage->AllocateScalars(VTK_UNSIGNED_CHAR, channels);
-}
-
 } // end namespace

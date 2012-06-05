@@ -50,13 +50,13 @@ typedef itk::Image<FloatVector2Type , 2> FloatVector2ImageType;
 
 void CreateTransparentVTKImage(const itk::Size<2>& size, vtkImageData* const outputImage);
 
-// Create an image from the values in an array of the corresponding structured grid points.
+/** Create an image from the values in an array of the corresponding structured grid points. */
 void CreateVectorImageFromStructuredGridArray(vtkStructuredGrid* const structuredGrid, const std::string& arrayName,
                                               FloatVectorImageType* const outputImage);
 
 void PixelListToPoints(const std::vector<itk::Index<2> >& pixels, vtkPoints* const points);
 
-// Create an image from the values in an array of the corresponding structured grid points.
+/** Create an image from the values in an array of the corresponding structured grid points. */
 void CreateScalarImageFromStructuredGridArray(vtkStructuredGrid* const structuredGrid, const std::string& arrayName,
                                               FloatScalarImageType* const outputImage);
 
@@ -68,6 +68,9 @@ void SetPixels(vtkImageData* const VTKImage, const std::vector<itk::Index<2> >& 
 */
 void SetRegionCenterPixel(vtkImageData* const image, const itk::ImageRegion<2>& region,
                           const unsigned char color[3]);
+
+/** Initialize a VTK image from an ITK image's size. */
+void InitializeVTKImage(const itk::ImageRegion<2>& region, const unsigned int channels, vtkImageData* outputImage);
 
 /** This function simply drives ITKImagetoVTKRGBImage or ITKImagetoVTKMagnitudeImage based on
   * the number of components of the input. */
@@ -90,20 +93,20 @@ template <typename TPixel>
 void ITKImageChannelToVTKImage(const itk::VectorImage<TPixel, 2>* const image, const unsigned int channel,
                                vtkImageData* const outputImage);
 
-// Create a VTK image filled with values representing vectors. (There is no concept of a "vector image" in VTK).
+/* Create a VTK image filled with values representing vectors. (There is no concept of a "vector image" in VTK). */
 void ITKImageToVTKVectorFieldImage(const FloatVector2ImageType* image, vtkImageData* outputImage);
 
-// It is too intensive to glyph every vector in a vector image. In many cases, the vector field may have
-// very large regions of zero vectors. This function creates the vectors for only the non-zero pixels in
-// the vector image.
+/** It is often too intensive to glyph every vector in a vector image. In many cases, the vector field may have
+  * very large regions of zero vectors. This function creates the vectors for only the non-zero pixels in
+  * the vector image. */
 void ConvertNonZeroPixelsToVectors(const FloatVector2ImageType* const vectorImage, vtkPolyData* const output);
 
 
-// Simply calls BlankRegion followed by OutlineRegion
+/** Simply calls BlankRegion followed by OutlineRegion */
 void BlankAndOutlineRegion(vtkImageData* const image, const itk::ImageRegion<2>& region,
                            const unsigned char value[3]);
 
-// Set pixels on the boundary of 'region' in 'image' to 'value'.
+/** Set pixels on the boundary of 'region' in 'image' to 'value'. */
 void OutlineRegion(vtkImageData* const image, const itk::ImageRegion<2>& region, const unsigned char value[3]);
 
 /** Convert an ITK image to a VTK image */
@@ -113,6 +116,9 @@ void ITKRGBImageToVTKImage(const itk::Image<itk::RGBPixel<unsigned char>, 2>* co
 /** Set all pixels in 'region' in 'image' to black. */
 void BlankRegion(vtkImageData* const image, const itk::ImageRegion<2>& region);
 
+/** Set the alpha channel of all pixels in 'pixels' to 'value'. */
+void SetPixelTransparency(vtkImageData* const image, const std::vector<itk::Index<2> >& pixels, const unsigned char value);
+
 /** Convert a scalar ITK image into a VTK image after scaling the magnitude to a grayscale range (0 - 255). */
 template <typename TImage>
 void ITKScalarImageToScaledVTKImage(const TImage* const image, vtkImageData* const outputImage);
@@ -120,10 +126,6 @@ void ITKScalarImageToScaledVTKImage(const TImage* const image, vtkImageData* con
 /** Create a VTK image of a patch of an image. */
 template <typename TImage>
 void CreatePatchVTKImage(const TImage* image, const itk::ImageRegion<2>& region, vtkImageData* outputImage);
-
-/** Initialize a VTK image from an ITK image's size. */
-template <typename TImage>
-void InitializeVTKImage(const itk::ImageRegion<2>& region, const unsigned int channels, vtkImageData* outputImage);
 
 } // end namespace
 

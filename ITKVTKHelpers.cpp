@@ -165,16 +165,16 @@ void OutlineRegion(vtkImageData* const image, const itk::ImageRegion<2>& region,
 
   unsigned int leftEdge = region.GetIndex()[0];
   //std::cout << "leftEdge : " << leftEdge << std::endl;
-  
+
   unsigned int rightEdge = region.GetIndex()[0] + region.GetSize()[0] - 1;
   //std::cout << "rightEdge : " << rightEdge << std::endl;
 
   unsigned int topEdge = region.GetIndex()[1];
   //std::cout << "topEdge : " << topEdge << std::endl;
-  
+
   unsigned int bottomEdge = region.GetIndex()[1] + region.GetSize()[1] - 1;
   //std::cout << "bottomEdge : " << bottomEdge << std::endl;
-  
+
   // Move along the top and bottom of the region, setting the border pixels.
   unsigned int counter = 0;
   for(unsigned int xpos = leftEdge; xpos <= rightEdge; ++xpos)
@@ -462,6 +462,32 @@ void ITKRGBImageToVTKImage(const itk::Image<itk::RGBPixel<unsigned char>, 2>* co
     }
 
   outputImage->Modified();
+}
+
+void InitializeVTKImage(const itk::ImageRegion<2>& region, const unsigned int channels, vtkImageData* outputImage)
+{
+  // Setup and allocate the VTK image
+  outputImage->SetDimensions(region.GetSize()[0],
+                             region.GetSize()[1],
+                             1);
+  outputImage->AllocateScalars(VTK_UNSIGNED_CHAR, channels);
+}
+
+void SetPixelTransparency(vtkImageData* const image, const std::vector<itk::Index<2> >& pixels, const unsigned char value)
+{
+  if(image->GetNumberOfScalarComponents() != 4)
+  {
+    std::stringstream ss;
+    ss << "Cannot set pixel transparency of an image with " << image->GetNumberOfScalarComponents() << " components.";
+    throw std::runtime_error(ss.str());
+  }
+
+  for(unsigned int i = 0; i < pixels.size(); ++i)
+  {
+    unsigned char* pixel = static_cast<unsigned char*>(image->GetScalarPointer(pixels[i][0],
+                                                                               pixels[i][1],0));
+    pixel[3] = value;
+  }
 }
 
 } // end namespace
