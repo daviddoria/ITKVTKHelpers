@@ -17,7 +17,7 @@ INCLUDE(${ITK_USE_FILE})
 FIND_PACKAGE(VTK REQUIRED)
 INCLUDE(${VTK_USE_FILE})
 
-SET(ITKVTKHelpers_BuildTests ON CACHE BOOL "ITKVTKHelpers_BuildTests" FORCE)
+SET(ITKVTKHelpers_BuildTests OFF CACHE BOOL "ITKVTKHelpers_BuildTests")
 if(ITKVTKHelpers_BuildTests)
   add_subdirectory(Tests)
 endif(ITKVTKHelpers_BuildTests)
