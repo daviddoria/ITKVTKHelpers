@@ -11,11 +11,17 @@ if(UNIX)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 endif(UNIX)
 
-FIND_PACKAGE(ITK REQUIRED)
+FIND_PACKAGE(ITK REQUIRED ITKCommon ITKIOImageBase
+ITKImageIntensity ITKImageFeature ITKMathematicalMorphology ITKBinaryMathematicalMorphology ITKDistanceMap)
 INCLUDE(${ITK_USE_FILE})
 
 FIND_PACKAGE(VTK REQUIRED)
 INCLUDE(${VTK_USE_FILE})
+
+# Allow inheritance of include directories
+if(NOT ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+  set(ITKVTKHelpers_includes ${ITKHelpers_includes} ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
+endif()
 
 SET(ITKVTKHelpers_BuildTests OFF CACHE BOOL "ITKVTKHelpers_BuildTests")
 if(ITKVTKHelpers_BuildTests)
