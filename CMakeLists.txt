@@ -4,6 +4,7 @@ project(ITKVTKHelpers)
 
 if(NOT TARGET ITKHelpers)
   add_subdirectory(ITKHelpers)
+  include_directories(${ITKHelpers_includes})
 endif()
 
 # Required for c++0x features used in Helpers sub-sub-module
