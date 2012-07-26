@@ -6,6 +6,7 @@ message("ITKVTKHelpers used from ${CMAKE_CURRENT_SOURCE_DIR}")
 
 if(NOT TARGET ITKHelpers)
   add_subdirectory(ITKHelpers)
+  include_directories(${ITKHelpers_includes})
 endif()
 
 # Required for c++0x features used in Helpers sub-sub-module
