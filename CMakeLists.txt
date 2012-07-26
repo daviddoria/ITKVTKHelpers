@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 
 project(ITKVTKHelpers)
 
+message("ITKVTKHelpers used from ${CMAKE_CURRENT_SOURCE_DIR}")
+
 if(NOT TARGET ITKHelpers)
   add_subdirectory(ITKHelpers)
 endif()
@@ -11,10 +13,12 @@ if(UNIX)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 endif(UNIX)
 
+# ITK
 FIND_PACKAGE(ITK REQUIRED ITKCommon ITKIOImageBase
 ITKImageIntensity ITKImageFeature ITKMathematicalMorphology ITKBinaryMathematicalMorphology ITKDistanceMap)
 INCLUDE(${ITK_USE_FILE})
 
+# VTK
 FIND_PACKAGE(VTK REQUIRED)
 INCLUDE(${VTK_USE_FILE})
 
