@@ -1,6 +1,6 @@
 /*=========================================================================
  *
- *  Copyright David Doria 2011 daviddoria@gmail.com
+ *  Copyright David Doria 2012 daviddoria@gmail.com
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -56,13 +56,15 @@ void ITKScalarImageToScaledVTKImage(const TImage* const image, vtkImageData* con
   outputImage->AllocateScalars(VTK_UNSIGNED_CHAR, 1);
 
   // Copy all of the scaled magnitudes to the output image
-  itk::ImageRegionConstIteratorWithIndex<UnsignedCharScalarImageType> imageIterator(rescaleFilter->GetOutput(), rescaleFilter->GetOutput()->GetLargestPossibleRegion());
-  imageIterator.GoToBegin();
+  itk::ImageRegionConstIteratorWithIndex<UnsignedCharScalarImageType>
+       imageIterator(rescaleFilter->GetOutput(),
+                     rescaleFilter->GetOutput()->GetLargestPossibleRegion());
 
   while(!imageIterator.IsAtEnd())
     {
-    unsigned char* pixel = static_cast<unsigned char*>(outputImage->GetScalarPointer(imageIterator.GetIndex()[0],
-                                                                                     imageIterator.GetIndex()[1],0));
+    unsigned char* pixel = static_cast<unsigned char*>(
+                             outputImage->GetScalarPointer(imageIterator.GetIndex()[0],
+                                                           imageIterator.GetIndex()[1],0));
     pixel[0] = imageIterator.Get();
 
     ++imageIterator;
@@ -72,7 +74,8 @@ void ITKScalarImageToScaledVTKImage(const TImage* const image, vtkImageData* con
 }
 
 template <typename TImage>
-void CreatePatchVTKImage(const TImage* image, const itk::ImageRegion<2>& region, vtkImageData* outputImage)
+void CreatePatchVTKImage(const TImage* image, const itk::ImageRegion<2>& region,
+                         vtkImageData* outputImage)
 {
   typedef itk::RegionOfInterestImageFilter<TImage, TImage> ExtractFilterType;
   typename ExtractFilterType::Pointer extractFilter = ExtractFilterType::New();
@@ -86,7 +89,8 @@ void CreatePatchVTKImage(const TImage* image, const itk::ImageRegion<2>& region,
 
 // Convert a vector ITK image to a VTK image for display
 template <typename TPixel>
-void ITKVectorImageToVTKImageFromDimension(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage)
+void ITKVectorImageToVTKImageFromDimension(const itk::VectorImage<TPixel, 2>* const image,
+                                           vtkImageData* const outputImage)
 {
   // If the image has 3 channels, assume it is RGB.
   //if(image->GetNumberOfComponentsPerPixel() == 3)
@@ -104,7 +108,8 @@ void ITKVectorImageToVTKImageFromDimension(const itk::VectorImage<TPixel, 2>* co
 
 // Convert a vector ITK image to a VTK image for display
 template <typename TPixel>
-void ITKImageToVTKRGBImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage, const bool alreadyInitialized)
+void ITKImageToVTKRGBImage(const itk::VectorImage<TPixel, 2>* const image,
+                           vtkImageData* const outputImage, const bool alreadyInitialized)
 {
   // This function assumes an ND (with N>3) image has the first 3 channels as RGB and extra
   // information in the remaining channels.
@@ -128,13 +133,14 @@ void ITKImageToVTKRGBImage(const itk::VectorImage<TPixel, 2>* const image, vtkIm
   }
 
   // Copy all of the input image pixels to the output image
-  itk::ImageRegionConstIteratorWithIndex<VectorImageType> imageIterator(image, image->GetLargestPossibleRegion());
-  imageIterator.GoToBegin();
+  itk::ImageRegionConstIteratorWithIndex<VectorImageType>
+        imageIterator(image, image->GetLargestPossibleRegion());
 
   while(!imageIterator.IsAtEnd())
     {
-    unsigned char* pixel = static_cast<unsigned char*>(outputImage->GetScalarPointer(imageIterator.GetIndex()[0],
-                                                                                     imageIterator.GetIndex()[1],0));
+    unsigned char* pixel = static_cast<unsigned char*>(
+                             outputImage->GetScalarPointer(imageIterator.GetIndex()[0],
+                                                           imageIterator.GetIndex()[1], 0));
     for(unsigned int component = 0; component < 3; component++)
       {
       pixel[component] = static_cast<unsigned char>(imageIterator.Get()[component]);
@@ -163,13 +169,14 @@ void ITKImageToVTKRGBImage(const itk::Image<itk::CovariantVector<TPixel, 3>, 2>*
   }
 
   // Copy all of the input image pixels to the output image
-  itk::ImageRegionConstIteratorWithIndex<ImageType> imageIterator(image, image->GetLargestPossibleRegion());
-  imageIterator.GoToBegin();
+  itk::ImageRegionConstIteratorWithIndex<ImageType>
+         imageIterator(image, image->GetLargestPossibleRegion());
 
   while(!imageIterator.IsAtEnd())
     {
-    unsigned char* pixel = static_cast<unsigned char*>(outputImage->GetScalarPointer(imageIterator.GetIndex()[0],
-                                                                                     imageIterator.GetIndex()[1],0));
+    unsigned char* pixel = static_cast<unsigned char*>(
+                             outputImage->GetScalarPointer(imageIterator.GetIndex()[0],
+                                                           imageIterator.GetIndex()[1], 0));
     for(unsigned int component = 0; component < 3; component++)
       {
       pixel[component] = static_cast<unsigned char>(imageIterator.Get()[component]);
@@ -183,7 +190,8 @@ void ITKImageToVTKRGBImage(const itk::Image<itk::CovariantVector<TPixel, 3>, 2>*
 
 // Convert a vector ITK image to a VTK image for display
 template <typename TPixel>
-void ITKImageToVTKMagnitudeImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage)
+void ITKImageToVTKMagnitudeImage(const itk::VectorImage<TPixel, 2>* const image,
+                                 vtkImageData* const outputImage)
 {
   //std::cout << "ITKImagetoVTKMagnitudeImage()" << std::endl;
 
@@ -215,13 +223,14 @@ void ITKImageToVTKMagnitudeImage(const itk::VectorImage<TPixel, 2>* const image,
   outputImage->AllocateScalars(VTK_UNSIGNED_CHAR, 3);
 
   // Copy all of the scaled magnitudes to the output image
-  itk::ImageRegionConstIteratorWithIndex<UnsignedCharScalarImageType> imageIterator(rescaleFilter->GetOutput(), rescaleFilter->GetOutput()->GetLargestPossibleRegion());
-  imageIterator.GoToBegin();
+  itk::ImageRegionConstIteratorWithIndex<UnsignedCharScalarImageType>
+        imageIterator(rescaleFilter->GetOutput(), rescaleFilter->GetOutput()->GetLargestPossibleRegion());
 
   while(!imageIterator.IsAtEnd())
     {
-    unsigned char* pixel = static_cast<unsigned char*>(outputImage->GetScalarPointer(imageIterator.GetIndex()[0],
-                                                                                     imageIterator.GetIndex()[1],0));
+    unsigned char* pixel = static_cast<unsigned char*>(
+                             outputImage->GetScalarPointer(imageIterator.GetIndex()[0],
+                                                           imageIterator.GetIndex()[1], 0));
     pixel[0] = imageIterator.Get();
     pixel[1] = imageIterator.Get();
     pixel[2] = imageIterator.Get();
@@ -233,7 +242,8 @@ void ITKImageToVTKMagnitudeImage(const itk::VectorImage<TPixel, 2>* const image,
 }
 
 template <typename TPixel>
-void ITKImageChannelToVTKImage(const itk::VectorImage<TPixel, 2>* const image, const unsigned int channel, vtkImageData* const outputImage)
+void ITKImageChannelToVTKImage(const itk::VectorImage<TPixel, 2>* const image,
+                               const unsigned int channel, vtkImageData* const outputImage)
 {
   FloatScalarImageType::Pointer channelImage = FloatScalarImageType::New();
   ITKHelpers::ExtractChannel(image, channel, channelImage.GetPointer());
