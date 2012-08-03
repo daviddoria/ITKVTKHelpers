@@ -236,8 +236,8 @@ template <typename TPixel>
 void ITKImageChannelToVTKImage(const itk::VectorImage<TPixel, 2>* const image, const unsigned int channel, vtkImageData* const outputImage)
 {
   FloatScalarImageType::Pointer channelImage = FloatScalarImageType::New();
-  ITKHelpers::ExtractChannel<float>(image, channel, channelImage);
-  ITKScalarImageToScaledVTKImage<FloatScalarImageType>(channelImage, outputImage);
+  ITKHelpers::ExtractChannel(image, channel, channelImage.GetPointer());
+  ITKScalarImageToScaledVTKImage(channelImage.GetPointer(), outputImage);
 }
 
 } // end namespace
