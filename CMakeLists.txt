@@ -18,17 +18,25 @@ if(UNIX)
 endif(UNIX)
 
 # ITK
-FIND_PACKAGE(ITK REQUIRED ITKCommon ITKIOImageBase ITKIOPNG ITKIOMeta
-ITKImageIntensity ITKImageFeature ITKMathematicalMorphology ITKBinaryMathematicalMorphology ITKDistanceMap)
-INCLUDE(${ITK_USE_FILE})
+if(NOT ITK_FOUND)
+  FIND_PACKAGE(ITK REQUIRED ITKCommon ITKIOImageBase ITKIOPNG ITKIOMeta
+                            ITKImageIntensity ITKImageFeature ITKMathematicalMorphology
+                            ITKBinaryMathematicalMorphology ITKDistanceMap)
+  INCLUDE(${ITK_USE_FILE})
+  set(ITKVTKHelpers_libraries ${ITKVTKHelpers_libraries} ${ITK_LIBRARIES})
+endif()
 
 # VTK
-FIND_PACKAGE(VTK REQUIRED)
-INCLUDE(${VTK_USE_FILE})
+if(NOT VTK_FOUND)
+  FIND_PACKAGE(VTK REQUIRED)
+  INCLUDE(${VTK_USE_FILE})
+  set(ITKVTKHelpers_libraries ${ITKVTKHelpers_libraries} ${VTK_LIBRARIES})
+endif()
 
 # Allow inheritance of include directories
 if(NOT ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
   set(ITKVTKHelpers_includes ${ITKVTKHelpers_includes} ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
+  set(ITKVTKHelpers_libraries ${ITKVTKHelpers_libraries} PARENT_SCOPE)
 endif()
 
 SET(ITKVTKHelpers_BuildTests OFF CACHE BOOL "ITKVTKHelpers_BuildTests")

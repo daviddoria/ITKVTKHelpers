@@ -41,6 +41,10 @@ namespace ITKVTKHelpers
 {
   using namespace ITKHelpersTypes;
 
+//////////////////////////////////////////////
+///////////// Non-templated Functions ////////
+//////////////////////////////////////////////
+
 /** Convert the points in a polydata to a list of indices. */
 std::vector<itk::Index<2> > PolyDataToPixelList(vtkPolyData* const polydata);
 
@@ -75,31 +79,6 @@ void SetRegionCenterPixel(vtkImageData* const image, const itk::ImageRegion<2>& 
 void InitializeVTKImage(const itk::ImageRegion<2>& region, const unsigned int channels,
                         vtkImageData* outputImage);
 
-/** Convert an ITK image with vector pixels to a VTK image. */
-template <typename TPixel>
-void ITKImageToVTKRGBImage(const itk::Image<itk::CovariantVector<TPixel, 3>, 2>* const image,
-                           vtkImageData* const outputImage, const bool alreadyInitialized = false);
-
-
-/** This function simply drives ITKImagetoVTKRGBImage or ITKImagetoVTKMagnitudeImage based on
-  * the number of components of the input. */
-template <typename TPixel>
-void ITKVectorImageToVTKImageFromDimension(const itk::VectorImage<TPixel, 2>* const image,
-                                           vtkImageData* const outputImage);
-
-/** These functions create a VTK image from a multidimensional ITK image. */
-template <typename TPixel>
-void ITKImageToVTKRGBImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage,
-                           const bool alreadyInitialized = false);
-
-/** Convert an ITK image to a VTK image where each channel is the magnitude of the ITK image. */
-template <typename TPixel>
-void ITKImageToVTKMagnitudeImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage);
-
-/** Convert a specified 'channel' of an ITK image to a VTK image. */
-template <typename TPixel>
-void ITKImageChannelToVTKImage(const itk::VectorImage<TPixel, 2>* const image, const unsigned int channel,
-                               vtkImageData* const outputImage);
 
 /** Create a VTK image filled with values representing vectors. (There is no concept of a "vector image" in VTK). */
 void ITKImageToVTKVectorFieldImage(const FloatVector2ImageType* image, vtkImageData* outputImage);
@@ -127,6 +106,35 @@ void BlankRegion(vtkImageData* const image, const itk::ImageRegion<2>& region);
 /** Set the alpha channel of all pixels in 'pixels' to 'value'. */
 void SetPixelTransparency(vtkImageData* const image, const std::vector<itk::Index<2> >& pixels, const unsigned char value);
 
+//////////////////////////////////////////////
+///////////// Function Templates /////////////
+//////////////////////////////////////////////
+/** Convert an ITK image with vector pixels to a VTK image. */
+template <typename TPixel>
+void ITKImageToVTKRGBImage(const itk::Image<itk::CovariantVector<TPixel, 3>, 2>* const image,
+                           vtkImageData* const outputImage, const bool alreadyInitialized = false);
+
+
+/** This function simply drives ITKImagetoVTKRGBImage or ITKImagetoVTKMagnitudeImage based on
+  * the number of components of the input. */
+template <typename TPixel>
+void ITKVectorImageToVTKImageFromDimension(const itk::VectorImage<TPixel, 2>* const image,
+                                           vtkImageData* const outputImage);
+
+/** These functions create a VTK image from a multidimensional ITK image. */
+template <typename TPixel>
+void ITKImageToVTKRGBImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage,
+                           const bool alreadyInitialized = false);
+
+/** Convert an ITK image to a VTK image where each channel is the magnitude of the ITK image. */
+template <typename TPixel>
+void ITKImageToVTKMagnitudeImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage);
+
+/** Convert a specified 'channel' of an ITK image to a VTK image. */
+template <typename TPixel>
+void ITKImageChannelToVTKImage(const itk::VectorImage<TPixel, 2>* const image, const unsigned int channel,
+                               vtkImageData* const outputImage);
+
 /** Convert a scalar ITK image into a VTK image after scaling the magnitude to a grayscale range (0 - 255). */
 template <typename TImage>
 void ITKScalarImageToScaledVTKImage(const TImage* const image, vtkImageData* const outputImage);
@@ -134,6 +142,18 @@ void ITKScalarImageToScaledVTKImage(const TImage* const image, vtkImageData* con
 /** Create a VTK image of a patch of an image. */
 template <typename TImage>
 void CreatePatchVTKImage(const TImage* image, const itk::ImageRegion<2>& region, vtkImageData* outputImage);
+
+/** Convert an RGB image to a HSV image. This function is in ITKVTKHelpers rather than ITKHelpers because it relies
+  * on the color space conversion functions in vtkMath.
+  * This function expects the RGB image to have values in [0,255], and the output HSV image will have values in [0,1].*/
+template <typename TRGBImage, typename THSVImage>
+void ConvertRGBtoHSV(const TRGBImage* const rgbImage, THSVImage* const hsvImage);
+
+/** Convert an HSV image to an RGB image. This function is in ITKVTKHelpers rather than ITKHelpers because it relies
+  * on the color space conversion functions in vtkMath.
+  * This function expects the HSV image to have values in [0,1], and produces output RGB values in [0,255].*/
+template <typename THSVImage, typename TRGBImage>
+void ConvertHSVtoRGB(const THSVImage* const hsvImage, TRGBImage* const rgbImage);
 
 } // end namespace
 

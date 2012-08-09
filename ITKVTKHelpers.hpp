@@ -23,6 +23,7 @@
 
 // VTK
 #include <vtkImageData.h>
+#include <vtkMath.h>
 #include <vtkPolyData.h>
 
 // Submodules
@@ -248,6 +249,72 @@ void ITKImageChannelToVTKImage(const itk::VectorImage<TPixel, 2>* const image,
   FloatScalarImageType::Pointer channelImage = FloatScalarImageType::New();
   ITKHelpers::ExtractChannel(image, channel, channelImage.GetPointer());
   ITKScalarImageToScaledVTKImage(channelImage.GetPointer(), outputImage);
+}
+
+template <typename TRGBImage, typename THSVImage>
+void ConvertRGBtoHSV(const TRGBImage* const rgbImage, THSVImage* const hsvImage)
+{
+  hsvImage->SetRegions(rgbImage->GetLargestPossibleRegion());
+  hsvImage->Allocate();
+
+  // Copy all of the scaled magnitudes to the output image
+  itk::ImageRegionIteratorWithIndex<THSVImage>
+        hsvIterator(hsvImage, hsvImage->GetLargestPossibleRegion());
+
+  while(!hsvIterator.IsAtEnd())
+    {
+    float rgb[3];
+    for(unsigned int i = 0; i < 3; ++i)
+    {
+      rgb[i] = rgbImage->GetPixel(hsvIterator.GetIndex())[i];
+    }
+
+    float hsv[3];
+    vtkMath::RGBToHSV(rgb, hsv);
+
+    typename THSVImage::PixelType hsvPixel;
+    for(unsigned int i = 0; i < 3; ++i)
+    {
+      hsvPixel[i] = hsv[i];
+    }
+
+    hsvIterator.Set(hsvPixel);
+
+    ++hsvIterator;
+    }
+}
+
+template <typename THSVImage, typename TRGBImage>
+void ConvertHSVtoRGB(const THSVImage* const hsvImage, TRGBImage* const rgbImage)
+{
+  rgbImage->SetRegions(hsvImage->GetLargestPossibleRegion());
+  rgbImage->Allocate();
+
+  // Copy all of the scaled magnitudes to the output image
+  itk::ImageRegionIteratorWithIndex<TRGBImage>
+        rgbIterator(rgbImage, rgbImage->GetLargestPossibleRegion());
+
+  while(!rgbIterator.IsAtEnd())
+    {
+    float hsv[3];
+    for(unsigned int i = 0; i < 3; ++i)
+    {
+      hsv[i] = hsvImage->GetPixel(rgbIterator.GetIndex())[i];
+    }
+
+    float rgb[3];
+    vtkMath::HSVToRGB(hsv, rgb);
+
+    typename TRGBImage::PixelType rgbPixel;
+    for(unsigned int i = 0; i < 3; ++i)
+    {
+      rgbPixel[i] = 255.0f * rgb[i];
+    }
+
+    rgbIterator.Set(rgbPixel);
+
+    ++rgbIterator;
+    }
 }
 
 } // end namespace
