@@ -255,6 +255,13 @@ template <typename TRGBImage, typename THSVImage>
 void ConvertRGBtoHSV(const TRGBImage* const rgbImage, THSVImage* const hsvImage)
 {
   hsvImage->SetRegions(rgbImage->GetLargestPossibleRegion());
+
+  // If this is the case, we assume that TRGBImage is itk::VectorImage
+  if(hsvImage->GetNumberOfComponentsPerPixel() != rgbImage->GetNumberOfComponentsPerPixel())
+  {
+    hsvImage->SetNumberOfComponentsPerPixel(rgbImage->GetNumberOfComponentsPerPixel());
+  }
+
   hsvImage->Allocate();
 
   // Copy all of the scaled magnitudes to the output image
@@ -272,7 +279,8 @@ void ConvertRGBtoHSV(const TRGBImage* const rgbImage, THSVImage* const hsvImage)
     float hsv[3];
     vtkMath::RGBToHSV(rgb, hsv);
 
-    typename THSVImage::PixelType hsvPixel;
+    // We do this so that the vector is definitely the correct size
+    typename THSVImage::PixelType hsvPixel = hsvIterator.Get();
     for(unsigned int i = 0; i < 3; ++i)
     {
       hsvPixel[i] = hsv[i];
@@ -288,6 +296,13 @@ template <typename THSVImage, typename TRGBImage>
 void ConvertHSVtoRGB(const THSVImage* const hsvImage, TRGBImage* const rgbImage)
 {
   rgbImage->SetRegions(hsvImage->GetLargestPossibleRegion());
+
+  // If this is the case, we assume that TRGBImage is itk::VectorImage
+  if(rgbImage->GetNumberOfComponentsPerPixel() != hsvImage->GetNumberOfComponentsPerPixel())
+  {
+    rgbImage->SetNumberOfComponentsPerPixel(hsvImage->GetNumberOfComponentsPerPixel());
+  }
+
   rgbImage->Allocate();
 
   // Copy all of the scaled magnitudes to the output image
@@ -295,7 +310,7 @@ void ConvertHSVtoRGB(const THSVImage* const hsvImage, TRGBImage* const rgbImage)
         rgbIterator(rgbImage, rgbImage->GetLargestPossibleRegion());
 
   while(!rgbIterator.IsAtEnd())
-    {
+  {
     float hsv[3];
     for(unsigned int i = 0; i < 3; ++i)
     {
@@ -305,7 +320,8 @@ void ConvertHSVtoRGB(const THSVImage* const hsvImage, TRGBImage* const rgbImage)
     float rgb[3];
     vtkMath::HSVToRGB(hsv, rgb);
 
-    typename TRGBImage::PixelType rgbPixel;
+    // We do this so that the vector is definitely the correct size
+    typename TRGBImage::PixelType rgbPixel = rgbIterator.Get();
     for(unsigned int i = 0; i < 3; ++i)
     {
       rgbPixel[i] = 255.0f * rgb[i];
@@ -314,7 +330,7 @@ void ConvertHSVtoRGB(const THSVImage* const hsvImage, TRGBImage* const rgbImage)
     rgbIterator.Set(rgbPixel);
 
     ++rgbIterator;
-    }
+  }
 }
 
 } // end namespace

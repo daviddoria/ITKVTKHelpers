@@ -41,6 +41,8 @@ void TestOutlineRegion()
 
 void TestHSVRGB()
 {
+  {
+  // Image<CovariantVector>
   typedef itk::Image<itk::CovariantVector<unsigned char, 3>, 2> RGBImageType;
   RGBImageType::Pointer rgbImage = RGBImageType::New();
 
@@ -49,4 +51,17 @@ void TestHSVRGB()
 
   ITKVTKHelpers::ConvertRGBtoHSV(rgbImage.GetPointer(), hsvImage.GetPointer());
   ITKVTKHelpers::ConvertHSVtoRGB(hsvImage.GetPointer(), rgbImage.GetPointer());
+  }
+
+  {
+  // VectorImage
+  typedef itk::VectorImage<unsigned char, 2> RGBImageType;
+  RGBImageType::Pointer rgbImage = RGBImageType::New();
+
+  typedef itk::VectorImage<float, 2> HSVImageType;
+  HSVImageType::Pointer hsvImage = HSVImageType::New();
+
+  ITKVTKHelpers::ConvertRGBtoHSV(rgbImage.GetPointer(), hsvImage.GetPointer());
+  ITKVTKHelpers::ConvertHSVtoRGB(hsvImage.GetPointer(), rgbImage.GetPointer());
+  }
 }
