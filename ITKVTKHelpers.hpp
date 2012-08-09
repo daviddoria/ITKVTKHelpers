@@ -273,7 +273,7 @@ void ConvertRGBtoHSV(const TRGBImage* const rgbImage, THSVImage* const hsvImage)
     float rgb[3];
     for(unsigned int i = 0; i < 3; ++i)
     {
-      rgb[i] = rgbImage->GetPixel(hsvIterator.GetIndex())[i];
+      rgb[i] = rgbImage->GetPixel(hsvIterator.GetIndex())[i] / 255.0f;
     }
 
     float hsv[3];

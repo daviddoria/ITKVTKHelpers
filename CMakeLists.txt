@@ -19,19 +19,25 @@ endif(UNIX)
 
 # ITK
 if(NOT ITK_FOUND)
+  message("ITK used from ITKVTKHelpers")
   FIND_PACKAGE(ITK REQUIRED ITKCommon ITKIOImageBase ITKIOPNG ITKIOMeta
                             ITKImageIntensity ITKImageFeature ITKMathematicalMorphology
                             ITKBinaryMathematicalMorphology ITKDistanceMap)
   INCLUDE(${ITK_USE_FILE})
-  set(ITKVTKHelpers_libraries ${ITKVTKHelpers_libraries} ${ITK_LIBRARIES})
 endif()
+
+set(ITKVTKHelpers_includes ${ITKVTKHelpers_includes} ${ITK_INCLUDE_DIRS})
+set(ITKVTKHelpers_libraries ${ITKVTKHelpers_libraries} ${ITK_LIBRARIES})
 
 # VTK
 if(NOT VTK_FOUND)
+  message("VTK used from ITKVTKHelpers")
   FIND_PACKAGE(VTK REQUIRED)
   INCLUDE(${VTK_USE_FILE})
-  set(ITKVTKHelpers_libraries ${ITKVTKHelpers_libraries} ${VTK_LIBRARIES})
 endif()
+
+set(ITKVTKHelpers_includes ${ITKVTKHelpers_includes} ${VTK_INCLUDE_DIRS})
+set(ITKVTKHelpers_libraries ${ITKVTKHelpers_libraries} ${VTK_LIBRARIES})
 
 # Allow inheritance of include directories
 if(NOT ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
