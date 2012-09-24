@@ -35,12 +35,18 @@ if(NOT VTK_FOUND)
 endif()
 set(ITKVTKHelpers_libraries ${ITKVTKHelpers_libraries} ${VTK_LIBRARIES})
 
+add_custom_target(ITKVTKHelpersSources SOURCES
+ITKVTKHelpers.h
+ITKVTKHelpers.hpp
+)
+
 # Give the compiler all required include directories
 include_directories(${ITKVTKHelpers_include_dirs})
 
 # Create the library
 add_library(ITKVTKHelpers ITKVTKHelpers.cpp)
 target_link_libraries(ITKVTKHelpers ${ITKVTKHelpers_libraries})
+set(ITKVTKHelpers_libraries ${ITKVTKHelpers_libraries} ITKVTKHelpers)
 
 # Allow this project to be detected and used as a submodule
 set(ITKVTKHelpers_include_dirs ${ITKVTKHelpers_include_dirs} ${CMAKE_CURRENT_SOURCE_DIR})
