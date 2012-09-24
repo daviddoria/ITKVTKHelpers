@@ -54,7 +54,13 @@ set_property(GLOBAL PROPERTY ITKVTKHelpersIncludeDirs ${ITKVTKHelpers_include_di
 set_property(GLOBAL PROPERTY ITKVTKHelpersLibs ${ITKVTKHelpers_libraries})
 
 # Build the tests if requested
-SET(ITKVTKHelpers_BuildTests OFF CACHE BOOL "ITKVTKHelpers_BuildTests")
+option(ITKVTKHelpers_BuildTests "ITKVTKHelpers_BuildTests" OFF)
 if(ITKVTKHelpers_BuildTests)
   add_subdirectory(Tests)
 endif(ITKVTKHelpers_BuildTests)
+
+# Display where this code was used from (if it is used as a submodule, there may be multiple instances of this submodule in the project, only the first of which is used)
+option(ITKVTKHelpers_ShowSubmoduleLocation "Show the path from which ITKVTKHelpers was used?" OFF)
+if(ITKVTKHelpers_ShowSubmoduleLocation)
+  message("ITKVTKHelpers used from ${CMAKE_CURRENT_SOURCE_DIR}")
+endif(ITKVTKHelpers_ShowSubmoduleLocation)
