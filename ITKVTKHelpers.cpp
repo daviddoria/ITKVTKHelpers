@@ -234,7 +234,8 @@ void CreateVectorImageFromStructuredGridArray(vtkStructuredGrid* const structure
 
   outputImage->SetNumberOfComponentsPerPixel(dataArray->GetNumberOfComponents());
   itk::Index<2> corner = {{0,0}};
-  itk::Size<2> imageSize = {{dimensions[0], dimensions[1]}};
+  itk::Size<2> imageSize = {{static_cast<itk::SizeValueType>(dimensions[0]),
+                             static_cast<itk::SizeValueType>(dimensions[1])}};
   itk::ImageRegion<2> region(corner, imageSize);
   outputImage->SetRegions(region);
   outputImage->Allocate();
@@ -291,7 +292,8 @@ void CreateScalarImageFromStructuredGridArray(vtkStructuredGrid* const structure
 
   outputImage->SetNumberOfComponentsPerPixel(1);
   itk::Index<2> corner = {{0,0}};
-  itk::Size<2> imageSize = {{dimensions[0], dimensions[1]}};
+  itk::Size<2> imageSize = {{static_cast<itk::SizeValueType>(dimensions[0]),
+                             static_cast<itk::SizeValueType>(dimensions[1])}};
   itk::ImageRegion<2> region(corner, imageSize);
   outputImage->SetRegions(region);
   outputImage->Allocate();
