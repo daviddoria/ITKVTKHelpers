@@ -143,8 +143,8 @@ void ITKScalarImageToScaledVTKImage(const TImage* const image, vtkImageData* con
 template <typename TImage>
 void CreatePatchVTKImage(const TImage* image, const itk::ImageRegion<2>& region, vtkImageData* outputImage);
 
-/** Convert an RGB image to a HSV image. This function is in ITKVTKHelpers rather than ITKHelpers because it relies
-  * on the color space conversion functions in vtkMath.
+/** Convert the first 3 channels of an image (RGB) to an HSV image. This function is in ITKVTKHelpers rather than
+  * ITKHelpers because it relies on the color space conversion functions in vtkMath.
   * This function expects the RGB image to have values in [0,255], and the output HSV image will have values in [0,1].*/
 template <typename TRGBImage, typename THSVImage>
 void ConvertRGBtoHSV(const TRGBImage* const rgbImage, THSVImage* const hsvImage);
