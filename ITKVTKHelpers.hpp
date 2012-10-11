@@ -256,7 +256,7 @@ void ConvertRGBtoHSV(const TRGBImage* const rgbImage, THSVImage* const hsvImage)
 {
   hsvImage->SetRegions(rgbImage->GetLargestPossibleRegion());
 
-  // If this is the case, we assume that TRGBImage is itk::VectorImage
+  // If this is the case, we assume that TRGBImage is itk::VectorImage, so we must resize it
   if(hsvImage->GetNumberOfComponentsPerPixel() != rgbImage->GetNumberOfComponentsPerPixel())
   {
     hsvImage->SetNumberOfComponentsPerPixel(rgbImage->GetNumberOfComponentsPerPixel());
@@ -269,7 +269,7 @@ void ConvertRGBtoHSV(const TRGBImage* const rgbImage, THSVImage* const hsvImage)
         hsvIterator(hsvImage, hsvImage->GetLargestPossibleRegion());
 
   while(!hsvIterator.IsAtEnd())
-    {
+  {
     float rgb[3];
     for(unsigned int i = 0; i < 3; ++i)
     {
@@ -289,7 +289,7 @@ void ConvertRGBtoHSV(const TRGBImage* const rgbImage, THSVImage* const hsvImage)
     hsvIterator.Set(hsvPixel);
 
     ++hsvIterator;
-    }
+  }
 }
 
 template <typename THSVImage, typename TRGBImage>
