@@ -45,7 +45,8 @@ namespace ITKVTKHelpers
 ///////////// Non-templated Functions ////////
 //////////////////////////////////////////////
 
-/** Convert the points in a polydata to a list of indices. */
+/** Convert the points in a polydata to a list of indices This function
+  * simply calls PointsToPixelList with polydata->GetPoints(). */
 std::vector<itk::Index<2> > PolyDataToPixelList(vtkPolyData* const polydata);
 
 /** Convert the points in a vtkPoints object to a list of indices. */
