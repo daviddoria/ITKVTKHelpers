@@ -92,16 +92,27 @@ template <typename TImage>
 void ITKVectorImageToVTKImageFromDimension(const TImage* const image,
                                            vtkImageData* const outputImage)
 {
+  // This version should only be called for scalar images.
+
+  ITKScalarImageToScaledVTKImage(image, outputImage);
+
+  outputImage->Modified();
+}
+
+template <typename TPixel, unsigned int DComponents>
+void ITKVectorImageToVTKImageFromDimension(const itk::Image<itk::CovariantVector<TPixel, DComponents> >* const image,
+                                           vtkImageData* const outputImage)
+{
   // If the image has 3 channels, assume it is RGB.
   //if(image->GetNumberOfComponentsPerPixel() == 3)
   if(image->GetNumberOfComponentsPerPixel() >= 3)
-    {
+  {
     ITKImageToVTKRGBImage(image, outputImage);
-    }
+  }
   else
-    {
+  {
     ITKImageToVTKMagnitudeImage(image, outputImage);
-    }
+  }
 
   outputImage->Modified();
 }
@@ -113,15 +124,22 @@ void ITKVectorImageToVTKImageFromDimension(const itk::VectorImage<TPixel, 2>* co
   // If the image has 3 channels, assume it is RGB.
   //if(image->GetNumberOfComponentsPerPixel() == 3)
   if(image->GetNumberOfComponentsPerPixel() >= 3)
-    {
+  {
     ITKImageToVTKRGBImage(image, outputImage);
-    }
+  }
   else
-    {
+  {
     ITKImageToVTKMagnitudeImage(image, outputImage);
-    }
+  }
 
   outputImage->Modified();
+}
+
+template <typename TImage>
+void ITKImageToVTKRGBImage(const TImage* const image,
+                           vtkImageData* const outputImage, const bool alreadyInitialized = false)
+{
+  throw std::runtime_error("Can't conver a scalar image to an RGB image!");
 }
 
 // Convert a vector ITK image to a VTK image for display

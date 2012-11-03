@@ -110,27 +110,39 @@ void SetPixelTransparency(vtkImageData* const image, const std::vector<itk::Inde
 //////////////////////////////////////////////
 ///////////// Function Templates /////////////
 //////////////////////////////////////////////
-/** Convert an ITK image with vector pixels to a VTK image. */
+
+/** Convert an ITK image with vector pixels to a VTK image. This function assumes the image is a scalar image
+  * (itk::Image<T, 2> where T is a scalar). */
+template <typename TImage>
+void ITKImageToVTKRGBImage(const TImage* const image,
+                           vtkImageData* const outputImage, const bool alreadyInitialized = false);
+
+/** Convert an ITK image with vector pixels to a VTK image. This is a specialization for CovariantVector pixels. */
 template <typename TPixel>
 void ITKImageToVTKRGBImage(const itk::Image<itk::CovariantVector<TPixel, 3>, 2>* const image,
                            vtkImageData* const outputImage, const bool alreadyInitialized = false);
 
+/** These functions create a VTK image from a multidimensional ITK image. This is a specialization for VectorImage pixels. */
+template <typename TPixel>
+void ITKImageToVTKRGBImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage,
+                           const bool alreadyInitialized = false);
 
 /** This function simply drives ITKImagetoVTKRGBImage or ITKImagetoVTKMagnitudeImage based on
-  * the number of components of the input. */
+  * the number of components of the input.
+  * This version should only be called for scalar images.
+  */
 template <typename TImage>
 void ITKVectorImageToVTKImageFromDimension(const TImage* const image,
+                                           vtkImageData* const outputImage);
+
+template <typename TPixel, unsigned int DComponents>
+void ITKVectorImageToVTKImageFromDimension(const itk::Image<itk::CovariantVector<TPixel, DComponents> >* const image,
                                            vtkImageData* const outputImage);
 
 /** Specialization for VectorImage. */
 template <typename TPixel>
 void ITKVectorImageToVTKImageFromDimension(const itk::VectorImage<TPixel, 2>* const image,
                                            vtkImageData* const outputImage);
-
-/** These functions create a VTK image from a multidimensional ITK image. */
-template <typename TPixel>
-void ITKImageToVTKRGBImage(const itk::VectorImage<TPixel, 2>* const image, vtkImageData* const outputImage,
-                           const bool alreadyInitialized = false);
 
 /** Convert an ITK image to a VTK image where each channel is the magnitude of the ITK image. */
 template <typename TImage>
