@@ -48,12 +48,9 @@ void ITKScalarImageToScaledVTKImage(const TImage* const image, vtkImageData* con
   rescaleFilter->Update();
 
   // Setup and allocate the VTK image
-  //outputImage->SetNumberOfScalarComponents(1);
-  //outputImage->SetScalarTypeToUnsignedChar();
   outputImage->SetDimensions(image->GetLargestPossibleRegion().GetSize()[0],
                              image->GetLargestPossibleRegion().GetSize()[1],
                              1);
-  //outputImage->AllocateScalars();
   outputImage->AllocateScalars(VTK_UNSIGNED_CHAR, 1);
 
   // Copy all of the scaled magnitudes to the output image
@@ -62,14 +59,14 @@ void ITKScalarImageToScaledVTKImage(const TImage* const image, vtkImageData* con
                      rescaleFilter->GetOutput()->GetLargestPossibleRegion());
 
   while(!imageIterator.IsAtEnd())
-    {
+  {
     unsigned char* pixel = static_cast<unsigned char*>(
-                             outputImage->GetScalarPointer(imageIterator.GetIndex()[0],
-                                                           imageIterator.GetIndex()[1],0));
+          outputImage->GetScalarPointer(imageIterator.GetIndex()[0],
+          imageIterator.GetIndex()[1],0));
     pixel[0] = imageIterator.Get();
 
     ++imageIterator;
-    }
+  }
 
   outputImage->Modified();
 }
