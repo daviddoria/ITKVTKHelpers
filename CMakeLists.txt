@@ -3,16 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(ITKVTKHelpers)
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# Only include ITKHelpers if it is not already available.
-get_property(FoundITKHelpers GLOBAL PROPERTY ITKHelpersIncludeDirs SET)
-if(NOT FoundITKHelpers)
-  add_subdirectory(ITKHelpers)
-endif()
-
-get_property(ITKHelpersIncludeDirs GLOBAL PROPERTY ITKHelpersIncludeDirs)
-set(ITKVTKHelpers_include_dirs ${ITKVTKHelpers_include_dirs} ${ITKHelpersIncludeDirs})
-get_property(ITKHelpersLibs GLOBAL PROPERTY ITKHelpersLibs)
-set(ITKVTKHelpers_libraries ${ITKVTKHelpers_libraries} ${ITKHelpersLibs})
+add_subdirectory(CMakeHelpers)
 
 # Required for c++0x features used in Helpers sub-sub-module
 if(UNIX)
@@ -35,23 +26,19 @@ if(NOT VTK_FOUND)
 endif()
 set(ITKVTKHelpers_libraries ${ITKVTKHelpers_libraries} ${VTK_LIBRARIES})
 
+UseSubmodule(ITKHelpers ITKVTKHelpers)
+
 add_custom_target(ITKVTKHelpersSources SOURCES
 ITKVTKHelpers.h
 ITKVTKHelpers.hpp
 )
-
-# Give the compiler all required include directories
-include_directories(${ITKVTKHelpers_include_dirs})
 
 # Create the library
 add_library(ITKVTKHelpers ITKVTKHelpers.cpp)
 target_link_libraries(ITKVTKHelpers ${ITKVTKHelpers_libraries})
 set(ITKVTKHelpers_libraries ${ITKVTKHelpers_libraries} ITKVTKHelpers)
 
-# Allow this project to be detected and used as a submodule
-set(ITKVTKHelpers_include_dirs ${ITKVTKHelpers_include_dirs} ${CMAKE_CURRENT_SOURCE_DIR})
-set_property(GLOBAL PROPERTY ITKVTKHelpersIncludeDirs ${ITKVTKHelpers_include_dirs})
-set_property(GLOBAL PROPERTY ITKVTKHelpersLibs ${ITKVTKHelpers_libraries})
+CreateSubmodule(ITKVTKHelpers)
 
 # Build the tests if requested
 option(ITKVTKHelpers_BuildTests "ITKVTKHelpers_BuildTests" OFF)
