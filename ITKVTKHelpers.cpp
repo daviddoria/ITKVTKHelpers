@@ -241,36 +241,37 @@ void CreateVectorImageFromStructuredGridArray(vtkStructuredGrid* const structure
   outputImage->Allocate();
 
   while(!imageIterator.IsAtEnd())
-    {
-    int queryPoint[3] = {imageIterator.GetIndex()[0], imageIterator.GetIndex()[1], 0};
+  {
+    int queryPoint[3] = {static_cast<int>(imageIterator.GetIndex()[0]),
+                         static_cast<int>(imageIterator.GetIndex()[1]), 0};
     vtkIdType pointId = vtkStructuredData::ComputePointId(dimensions, queryPoint);
 
     FloatVectorImageType::PixelType p;
     p.SetSize(dataArray->GetNumberOfComponents());
 
     if(structuredGrid->IsPointVisible(pointId))
-      {
+    {
       std::vector<double> value(dataArray->GetNumberOfComponents());
       dataArray->GetTuple(pointId, value.data());
 
       for(vtkIdType component = 0; component < dataArray->GetNumberOfComponents(); ++component)
-        {
+      {
         p[component] = value[component];
-        }
+      }
 
       imageIterator.Set(p);
-      }
+    }
     else
-      {
+    {
       for(vtkIdType component = 0; component < dataArray->GetNumberOfComponents(); ++component)
-        {
+      {
         p[component] = 0;
-        }
       }
+    }
 
     imageIterator.Set(p);
     ++imageIterator;
-    }
+  }
 }
 
 
@@ -300,7 +301,8 @@ void CreateScalarImageFromStructuredGridArray(vtkStructuredGrid* const structure
 
   while(!imageIterator.IsAtEnd())
     {
-    int queryPoint[3] = {imageIterator.GetIndex()[0], imageIterator.GetIndex()[1], 0};
+    int queryPoint[3] = {static_cast<int>(imageIterator.GetIndex()[0]),
+                         static_cast<int>(imageIterator.GetIndex()[1]), 0};
     vtkIdType pointId = vtkStructuredData::ComputePointId(dimensions, queryPoint);
 
     FloatScalarImageType::PixelType p;
