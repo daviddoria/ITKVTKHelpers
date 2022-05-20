@@ -313,7 +313,7 @@ void CreateScalarImageFromStructuredGridArray(vtkStructuredGrid* const structure
 
       p = value[0];
 
-      imageIterator.Set(p);
+
       }
     else
       {
