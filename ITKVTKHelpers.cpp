@@ -145,7 +145,7 @@ void BlankRegion(vtkImageData* image, const itk::ImageRegion<2>& region)
     {
     for(unsigned int j = region.GetIndex()[1]; j < region.GetIndex()[1] + region.GetSize()[1]; ++j)
       {
-      unsigned char* pixel = static_cast<unsigned char*>(image->GetScalarPointer(i, region.GetIndex()[1], 0));
+      unsigned char* pixel = static_cast<unsigned char*>(image->GetScalarPointer(i, j, 0));
       pixel[0] = 0;
       pixel[1] = 0;
       pixel[2] = 0;
@@ -258,8 +258,7 @@ void CreateVectorImageFromStructuredGridArray(vtkStructuredGrid* const structure
       {
         p[component] = value[component];
       }
-
-      imageIterator.Set(p);
+		
     }
     else
     {
@@ -314,7 +313,7 @@ void CreateScalarImageFromStructuredGridArray(vtkStructuredGrid* const structure
 
       p = value[0];
 
-      imageIterator.Set(p);
+
       }
     else
       {
