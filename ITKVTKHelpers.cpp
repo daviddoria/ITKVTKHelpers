@@ -258,7 +258,7 @@ void CreateVectorImageFromStructuredGridArray(vtkStructuredGrid* const structure
       {
         p[component] = value[component];
       }
-
+		
     }
     else
     {
